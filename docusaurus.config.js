@@ -3,7 +3,7 @@ const config = {
   title: 'Physical AI & Humanoid Robotics Book',
   tagline: 'A Comprehensive Guide to Building AI-Powered Humanoid Robots from Simulation to Reality',
   url: 'https://your-github-username.github.io',
-  baseUrl: '/physical-ai-robotics-book/',
+  baseUrl: '/',
   organizationName: 'your-github-username',
   projectName: 'physical-ai-robotics-book',
   trailingSlash: true,
