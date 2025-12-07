@@ -14,7 +14,7 @@ This book is structured into four comprehensive modules, each focusing on critic
 import DocCardList from '@theme/DocCardList';
 import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
-<DocCardList items={[
+<!-- <DocCardList items={[
   {
     label: 'Module 1 – ROS 2: The Robotic Nervous System',
     description: 'Learn the Robot Operating System fundamentals for controlling humanoid robots.',
@@ -35,7 +35,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
     description: 'Combine perception, reasoning, and action for intelligent robot behavior.',
     href: '/docs/module-4-vla/intro',
   },
-]}/>
+]}/> -->
 
 ## Read the Book
 

@@ -35,7 +35,7 @@ const config = {
       title: 'Physical AI & Humanoid Robotics Book',
       logo: {
         alt: 'My Project Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       items: [
         {
@@ -47,17 +47,6 @@ const config = {
           to: '/docs/intro',
           label: 'Modules',
           position: 'left',
-        },
-        {
-          to: '/docs/intro',
-          label: 'Read Book',
-          position: 'left',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialsSidebar',
-          position: 'left',
-          label: 'Book',
         },
         {
           href: 'https://github.com/your-github-username/physical-ai-robotics-book',
@@ -95,11 +84,7 @@ const config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/your-github-username/physical-ai-robotics-book',
-            },
-            {
-              label: 'Blog',
-              to: 'blog',
+              href: 'https://github.com/TayyabAli92/Physical-AI-and-Humanoid-Robotics-Book',
             },
           ],
         },
