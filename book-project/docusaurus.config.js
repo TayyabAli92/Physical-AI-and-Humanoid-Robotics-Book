@@ -8,7 +8,9 @@ const config = {
   projectName: 'physical-ai-robotics-book',
   trailingSlash: true,
   onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    mermaid: true,
+  },
   favicon: 'img/favicon.ico',
   presets: [
     [
@@ -16,11 +18,11 @@ const config = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/TayyabAli92/Physical-AI-and-Humanoid-Robotics-Book/edit/main/book-project/',
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/TayyabAli92/Physical-AI-and-Humanoid-Robotics-Book/edit/main/book-project/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -49,7 +51,7 @@ const config = {
           position: 'left',
         },
         {
-          href: 'https://github.com/your-github-username/physical-ai-robotics-book',
+          href: 'https://github.com/TayyabAli92/Physical-AI-and-Humanoid-Robotics-Book',
           label: 'GitHub',
           position: 'right',
         },
@@ -105,8 +107,8 @@ const config = {
       copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics Book. All rights reserved.`,
     },
     prism: {
-      theme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/dracula'),
+      theme: require('prism-react-renderer').themes.github,
+      darkTheme: require('prism-react-renderer').themes.dracula,
     },
   },
   // Even if you don't use internalization, you can use this field to set useful
