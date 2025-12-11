@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  title: RAG API
+  description: API for RAG operations - retrieving relevant chunks and generating responses
+  version: 1.0.0
+paths:
+  /rag:
+    post:
+      summary: Retrieve relevant chunks and generate response
+      description: Takes user query, retrieves relevant chunks from Qdrant, and generates response using agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAGRequest'
+      responses:
+        '200':
+          description: Response generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAGResponse'
+        '400':
+          description: Invalid request parameters
+        '404':
+          description: Embedding not found - Re-run embed pipeline
+        '500':
+          description: Internal server error
+  /rag/selected:
+    post:
+      summary: Generate response from selected text only
+      description: Takes selected text and user query, generates response without querying Qdrant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectedTextRAGRequest'
+      responses:
+        '200':
+          description: Response generated successfully from selected text
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelectedTextRAGResponse'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    RAGRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The user's question
+          example: "What are the key principles of RAG systems?"
+        top_k:
+          type: integer
+          description: Number of chunks to retrieve (default: 5)
+          default: 5
+          example: 3
+    RAGResponse:
+      type: object
+      required:
+        - query
+        - answer
+        - retrieved_chunks
+      properties:
+        query:
+          type: string
+          description: The original user query
+          example: "What are the key principles of RAG systems?"
+        answer:
+          type: string
+          description: The agent's response
+          example: "RAG systems combine retrieval and generation components to provide accurate responses based on specific knowledge sources..."
+        retrieved_chunks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetrievedChunk'
+    SelectedTextRAGRequest:
+      type: object
+      required:
+        - selected_text
+        - query
+      properties:
+        selected_text:
+          type: string
+          description: The text selected by the user
+          example: "RAG systems are composed of two main components: a retrieval module that fetches relevant information from a knowledge base, and a generation module that creates responses based on the retrieved information."
+        query:
+          type: string
+          description: The user's question about the selected text
+          example: "Can you elaborate on the generation module?"
+    SelectedTextRAGResponse:
+      type: object
+      required:
+        - query
+        - answer
+        - selected_text_used
+      properties:
+        query:
+          type: string
+          description: The original user query
+          example: "Can you elaborate on the generation module?"
+        answer:
+          type: string
+          description: The agent's response based only on selected text
+          example: "The generation module in RAG systems takes the retrieved information and user query as input, then produces a coherent response using language models..."
+        selected_text_used:
+          type: string
+          description: The text that was used as context
+          example: "RAG systems are composed of two main components: a retrieval module that fetches relevant information from a knowledge base, and a generation module that creates responses based on the retrieved information."
+    RetrievedChunk:
+      type: object
+      required:
+        - text
+        - source_path
+        - score
+      properties:
+        text:
+          type: string
+          description: The chunk text
+          example: "RAG systems combine retrieval and generation components to provide accurate responses based on specific knowledge sources."
+        source_path:
+          type: string
+          description: Path to the source document
+          example: "book/chapter3.md"
+        score:
+          type: number
+          description: Similarity score
+          format: float
+          example: 0.85

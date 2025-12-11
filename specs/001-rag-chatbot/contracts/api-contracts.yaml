@@ -1,0 +1,139 @@
+# API Contracts: RAG Chatbot Backend
+
+## Overview
+This document defines the API contracts for the RAG chatbot backend service, including request/response schemas and expected behaviors.
+
+## POST /embed
+Generate embeddings for provided text content.
+
+### Request
+```json
+{
+  "text": "string (required) - The text to generate embeddings for"
+}
+```
+
+### Response (Success 200)
+```json
+{
+  "embedding": "array - The generated embedding vector",
+  "text_length": "integer - Length of the input text in characters",
+  "token_count": "integer - Number of tokens in the input text"
+}
+```
+
+### Response (Error 400)
+```json
+{
+  "error": "string - Error message explaining the failure"
+}
+```
+
+## POST /search
+Query the vector database for content chunks similar to the input text.
+
+### Request
+```json
+{
+  "query_text": "string (required) - The search query text",
+  "top_k": "integer (optional, default: 5) - Number of top results to return",
+  "threshold": "number (optional, default: 0.5) - Minimum similarity threshold"
+}
+```
+
+### Response (Success 200)
+```json
+{
+  "results": [
+    {
+      "id": "string - Content chunk ID",
+      "content": "string - The chunk content",
+      "similarity_score": "number - Similarity score between 0 and 1",
+      "metadata": "object - Additional metadata about the chunk"
+    }
+  ],
+  "query_text": "string - The original query text",
+  "total_results": "integer - Total number of results found"
+}
+```
+
+### Response (Error 400)
+```json
+{
+  "error": "string - Error message explaining the failure"
+}
+```
+
+## POST /ask-agent
+Process a user question and return an answer based on book content.
+
+### Request
+```json
+{
+  "question": "string (required) - The user's question",
+  "chat_session_id": "string (optional) - Existing chat session ID",
+  "highlighted_text": "string (optional) - Text highlighted by the user",
+  "context": {
+    "use_highlighted_text": "boolean (optional, default: false) - Whether to prioritize highlighted text"
+  }
+}
+```
+
+### Response (Success 200)
+```json
+{
+  "answer": "string - The generated answer from the LLM",
+  "chat_session_id": "string - The chat session ID",
+  "retrieved_chunks": [
+    {
+      "id": "string - Content chunk ID",
+      "content": "string - The chunk content used in generating the answer",
+      "similarity_score": "number - Similarity score of the chunk"
+    }
+  ],
+  "sources": ["string"] - List of source identifiers for the information
+}
+```
+
+### Response (Error 400)
+```json
+{
+  "error": "string - Error message explaining the failure"
+}
+```
+
+## GET /health
+Check the health status of the backend service.
+
+### Response (Success 200)
+```json
+{
+  "status": "string - Health status ('healthy')",
+  "timestamp": "string - ISO timestamp of the check",
+  "dependencies": {
+    "gemini": "string - Status of Gemini API connection",
+    "qdrant": "string - Status of Qdrant database connection"
+  }
+}
+```
+
+## Error Response Format
+All error responses follow this standard format:
+
+```json
+{
+  "error": "string - Human-readable error message",
+  "error_code": "string - Machine-readable error code",
+  "timestamp": "string - ISO timestamp of the error",
+  "request_id": "string - Unique identifier for the request"
+}
+```
+
+## Common HTTP Status Codes
+- 200: Success
+- 400: Bad Request (invalid input)
+- 401: Unauthorized (missing or invalid API key)
+- 404: Not Found (resource doesn't exist)
+- 429: Too Many Requests (rate limit exceeded)
+- 500: Internal Server Error (unexpected server error)
+- 503: Service Unavailable (dependency unavailable)

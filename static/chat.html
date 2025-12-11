@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #25c2a0;
+            color: white;
+            padding: 16px;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #25c2a0;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #e0e7ff;
+            color: #374151;
+            border-bottom-left-radius: 4px;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px 16px 16px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-container input:focus {
+            border-color: #25c2a0;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .input-container button {
+            padding: 12px 24px;
+            background-color: #25c2a0;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .input-container button:hover {
+            background-color: #25c2a0;
+        }
+
+        .input-container button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            background-color: #e0e7ff;
+            color: #374151;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI Assistant</h1>
+        <p>Ask questions about the Physical AI & Humanoid Robotics content</p>
+    </div>
+
+    <div class="chat-container">
+        <div class="messages" id="messages">
+            <div class="message bot-message">
+                Hello! I'm your AI assistant for the Physical AI & Humanoid Robotics course. Ask me anything about the content!
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Ask a question about the course content..." />
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const messagesContainer = document.getElementById('messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Notify parent window that the chat is ready
+        window.parent.postMessage({ type: 'READY' }, '*');
+
+        // Function to add a message to the chat
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = text;
+            messagesContainer.appendChild(messageDiv);
+
+            // Scroll to the bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Function to show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.textContent = 'Thinking...';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Function to hide typing indicator
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Function to send message to backend
+        async function sendMessage(text) {
+            try {
+                showTypingIndicator();
+
+                // Try multiple potential API endpoints in order of preference
+                const endpoints = [
+                    '/api/v1/rag', // Production endpoint (relative)
+                    'http://localhost:3001/api/v1/rag', // Local development
+                    `${window.location.origin}/api/v1/rag` // Full origin
+                ];
+
+                let response, data;
+                let success = false;
+
+                for (const endpoint of endpoints) {
+                    try {
+                        console.log(`Trying endpoint: ${endpoint}`);
+                        response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                query: text,
+                                top_k: 5
+                            })
+                        });
+
+                        if (response.ok) {
+                            data = await response.json();
+                            success = true;
+                            break;
+                        } else {
+                            console.warn(`Endpoint ${endpoint} returned status: ${response.status}`);
+                        }
+                    } catch (endpointError) {
+                        console.warn(`Failed to reach endpoint ${endpoint}:`, endpointError.message);
+                        continue; // Try next endpoint
+                    }
+                }
+
+                if (!success) {
+                    throw new Error('All endpoints failed');
+                }
+
+                hideTypingIndicator();
+
+                if (data && data.answer) {
+                    // Check if the answer is just the query being echoed back (which indicates an error)
+                    if (data.answer.toLowerCase().includes(text.toLowerCase()) &&
+                        data.answer.length < text.length * 1.2) { // If answer is similar to query and not much longer
+                        addMessage("Sorry, I'm having trouble processing your request. The AI service may be temporarily unavailable. Please try again.", false);
+                    } else {
+                        addMessage(data.answer, false);
+                    }
+                } else {
+                    addMessage("Sorry, I couldn't process your request. Please try again.", false);
+                }
+            } catch (error) {
+                console.error('Error details:', error);
+
+                // Try fallback endpoint for selected text if it's a connection error
+                if (window.selectedTextForAgent && window.selectedTextForAgent.length > 0) {
+                    const fallbackEndpoints = [
+                        '/api/v1/rag/selected',
+                        'http://localhost:3001/api/v1/rag/selected',
+                        `${window.location.origin}/api/v1/rag/selected`
+                    ];
+
+                    for (const endpoint of fallbackEndpoints) {
+                        try {
+                            console.log(`Trying fallback endpoint: ${endpoint}`);
+                            const response = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    query: text,
+                                    selected_text: window.selectedTextForAgent
+                                })
+                            });
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                hideTypingIndicator();
+
+                                if (data && data.answer) {
+                                    // Check if the answer is just the query being echoed back (which indicates an error)
+                                    if (data.answer.toLowerCase().includes(text.toLowerCase()) &&
+                                        data.answer.length < text.length * 1.2) { // If answer is similar to query and not much longer
+                                        addMessage("Sorry, I'm having trouble processing your request. The AI service may be temporarily unavailable. Please try again.", false);
+                                    } else {
+                                        addMessage(data.answer, false);
+                                        window.selectedTextForAgent = ''; // Clear the stored text
+                                        return; // Exit successfully
+                                    }
+                                }
+                            }
+                        } catch (fallbackError) {
+                            console.warn(`Fallback endpoint ${endpoint} failed:`, fallbackError.message);
+                            continue;
+                        }
+                    }
+                }
+
+                hideTypingIndicator();
+                addMessage("Sorry, there was an error connecting to the AI service. The model may be temporarily overloaded. Please try again in a moment.", false);
+            }
+        }
+
+        // Listen for messages from parent window
+        window.addEventListener('message', function(event) {
+            // Only accept messages from the same origin as the parent
+            if (event.source !== window.parent) return;
+
+            if (event.data && event.data.type === 'SELECTED_TEXT') {
+                // Store the selected text globally for potential fallback use
+                window.selectedTextForAgent = event.data.text;
+
+                // Add the selected text to the input field
+                userInput.value = event.data.text;
+                // Focus on the input field to make it clear it's ready for the user
+                userInput.focus();
+                // Move cursor to the end of the text
+                userInput.setSelectionRange(userInput.value.length, userInput.value.length);
+            }
+        });
+
+        // Event listener for send button
+        sendBtn.addEventListener('click', () => {
+            const text = userInput.value.trim();
+            if (text) {
+                addMessage(text, true);
+                userInput.value = '';
+                sendMessage(text);
+            }
+        });
+
+        // Event listener for Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendBtn.click();
+            }
+        });
+
+        // Listen for messages from parent window
+        window.addEventListener('message', function(event) {
+            // Only accept messages from the same origin as the parent
+            if (event.source !== window.parent) return;
+
+            if (event.data && event.data.type === 'SELECTED_TEXT') {
+                // Add the selected text to the input field
+                userInput.value = event.data.text;
+                // Focus on the input field to make it clear it's ready for the user
+                userInput.focus();
+                // Move cursor to the end of the text
+                userInput.setSelectionRange(userInput.value.length, userInput.value.length);
+            }
+        });
+
+        // Focus input on load
+        userInput.focus();
+    </script>
+</body>
+</html>

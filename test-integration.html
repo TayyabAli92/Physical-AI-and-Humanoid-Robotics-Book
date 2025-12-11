@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test RAG Chatbot Integration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>RAG Chatbot Full System Test</h1>
+
+    <div class="test-section">
+        <h2>System Status</h2>
+        <div id="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>API Tests</h2>
+        <button onclick="testHealth()">Test Backend Health</button>
+        <button onclick="testQuery()">Test Query Endpoint</button>
+        <button onclick="testFrontendWidget()">Test Frontend Widget</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:3001';
+        const FRONTEND_URL = 'http://localhost:3002';
+
+        async function testHealth() {
+            const statusDiv = document.getElementById('status');
+            try {
+                const response = await fetch(`${BACKEND_URL}/`);
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.innerHTML = `<div class="status success">✓ Backend is running: ${data.message}</div>`;
+                } else {
+                    statusDiv.innerHTML = `<div class="status error">✗ Backend health check failed</div>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="status error">✗ Backend is not accessible: ${error.message}</div>`;
+            }
+        }
+
+        async function testQuery() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<h3>Query Test:</h3><pre>Testing query: "What is Machine Learning?"</pre>';
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/ask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: 'What is Machine Learning?' })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    resultsDiv.innerHTML += `<div class="status success">✓ Query successful</div>`;
+                    resultsDiv.innerHTML += `<pre>Response: ${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    resultsDiv.innerHTML += `<div class="status error">✗ Query failed with status: ${response.status}</div>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="status error">✗ Query error: ${error.message}</div>`;
+            }
+        }
+
+        async function testFrontendWidget() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<h3>Frontend Widget Test:</h3><pre>Testing if frontend files are accessible</pre>';
+
+            try {
+                // Test if frontend files are accessible
+                const cssResponse = await fetch(`${FRONTEND_URL}/frontend/chatbot-widget.css`);
+                const jsResponse = await fetch(`${FRONTEND_URL}/frontend/chatbot-widget.js`);
+
+                if (cssResponse.ok && jsResponse.ok) {
+                    resultsDiv.innerHTML += `<div class="status success">✓ Frontend files are accessible</div>`;
+                    resultsDiv.innerHTML += `<div class="status success">✓ HTML page is available at ${FRONTEND_URL}/</div>`;
+                    resultsDiv.innerHTML += `<p><a href="${FRONTEND_URL}/" target="_blank">Open Full Frontend Interface</a></p>`;
+                } else {
+                    resultsDiv.innerHTML += `<div class="status error">✗ Frontend files not accessible</div>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="status error">✗ Frontend test error: ${error.message}</div>`;
+            }
+        }
+
+        // Run initial health check
+        window.onload = function() {
+            testHealth();
+        }
+    </script>
+</body>
+</html>

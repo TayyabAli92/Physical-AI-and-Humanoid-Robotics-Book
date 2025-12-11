@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: Embed API
+  description: API for creating embeddings and storing them in Qdrant
+  version: 1.0.0
+paths:
+  /embed:
+    post:
+      summary: Create embeddings and upsert to Qdrant
+      description: Takes book content, generates Cohere embeddings, and stores them in Qdrant collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbedRequest'
+      responses:
+        '200':
+          description: Embeddings created and stored successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbedResponse'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    EmbedRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          description: The text content to embed
+          example: "This is a sample book content that needs to be embedded for RAG."
+        source_path:
+          type: string
+          description: Path to the source document (optional)
+          example: "book/chapter1.md"
+    EmbedResponse:
+      type: object
+      required:
+        - status
+        - message
+        - chunks_processed
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+          example: "success"
+        message:
+          type: string
+          description: Human-readable status message
+          example: "Embeddings created and stored successfully"
+        chunks_processed:
+          type: integer
+          description: Number of text chunks processed
+          example: 5
+        error:
+          type: string
+          description: Error message if status is error
+          example: "Embedding not found: Re-run embed pipeline"

@@ -8,18 +8,28 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "rag-start": "node server.js",
+    "rag-dev": "nodemon server.js",
+    "process-book": "node process-book.js",
+    "embed-course": "node embed-course-content.js"
   },
   "dependencies": {
     "@docusaurus/core": "^3.1.0",
     "@docusaurus/preset-classic": "^3.1.0",
+    "@google/generative-ai": "^0.16.1",
     "@mdx-js/react": "^3.0.0",
+    "@qdrant/js-client-rest": "^1.16.2",
+    "chatkit-client": "^1.0.0",
     "clsx": "^2.0.0",
+    "cohere-ai": "^7.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
@@ -28,6 +38,7 @@
     "@docusaurus/module-type-aliases": "^3.1.0",
     "@docusaurus/tsconfig": "^3.1.0",
     "@tsconfig/docusaurus": "^2.0.2",
+    "nodemon": "^3.1.11",
     "typescript": "^5.0.0"
   },
   "browserslist": {

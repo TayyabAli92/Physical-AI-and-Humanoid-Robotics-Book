@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chatbot - Full Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .book-content {
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        .book-content h2 {
+            color: #2c3e50;
+        }
+        .book-content h3 {
+            color: #34495e;
+        }
+        .book-content p {
+            margin-bottom: 15px;
+        }
+        .highlight {
+            background-color: yellow;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Physical AI and Humanoid Robotics Course</h1>
+
+        <div class="book-content">
+            <h2>Introduction to AI and Machine Learning</h2>
+
+            <h3>Chapter 1: What is Artificial Intelligence?</h3>
+            <p>Artificial Intelligence (AI) is intelligence demonstrated by machines, in contrast to the natural intelligence displayed by humans and animals. Leading AI textbooks define the field as a study of "intelligent agents": any device that perceives its environment and takes actions that maximize its chance of successfully achieving its goals.</p>
+
+            <h3>Chapter 2: Machine Learning Basics</h3>
+            <p>Machine learning is a method of data analysis that automates analytical model building. It is a branch of artificial intelligence based on the idea that systems can learn from data, identify patterns and make decisions with minimal human intervention.</p>
+
+            <h3>Chapter 3: Deep Learning and Neural Networks</h3>
+            <p>Deep learning is part of a broader family of machine learning methods based on artificial neural networks with representation learning. Learning can be supervised, semi-supervised or unsupervised.</p>
+
+            <h3>Chapter 4: Applications of AI</h3>
+            <p>AI is used in a wide variety of applications including:</p>
+            <ul>
+                <li>Natural Language Processing</li>
+                <li>Computer Vision</li>
+                <li>Robotics</li>
+                <li>Healthcare</li>
+                <li>Finance</li>
+                <li>Transportation</li>
+            </ul>
+            <p>These applications are transforming industries and creating new possibilities for automation and insight generation.</p>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-container" class="chatbot-container">
+        <!-- Chatbot Header -->
+        <div id="chatbot-header" class="chatbot-header">
+            <div class="chatbot-title">Book Assistant</div>
+            <div class="chatbot-controls">
+                <button id="chatbot-minimize" class="chatbot-control-btn">−</button>
+                <button id="chatbot-close" class="chatbot-control-btn">×</button>
+            </div>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="message bot-message">
+                Hello! I'm your book assistant. Ask me anything about this book, or highlight text and ask questions about it.
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div id="chatbot-input-area" class="chatbot-input-area">
+            <textarea
+                id="chatbot-input"
+                class="chatbot-input"
+                placeholder="Ask a question about the book..."
+                rows="1"
+            ></textarea>
+            <button id="chatbot-send" class="chatbot-send-btn">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Launcher Button -->
+    <button id="chatbot-launcher" class="chatbot-launcher">
+        <span>💬</span>
+    </button>
+
+    <link rel="stylesheet" href="frontend/chatbot-widget.css">
+    <script src="frontend/chatbot-widget.js"></script>
+</body>
+</html>
