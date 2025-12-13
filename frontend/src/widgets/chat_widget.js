@@ -7,7 +7,7 @@ class ChatWidget {
   constructor(agentId) {
     this.agentId = agentId;
     this.isOpen = false;
-    this.apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    this.apiUrl = process.env.BACKEND_URL || "https://Tayyab92-physical-ai-backend.hf.space/api/v1/chat";
     this.initializeWidget();
   }
 
