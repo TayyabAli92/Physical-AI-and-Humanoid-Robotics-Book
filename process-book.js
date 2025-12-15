@@ -5,7 +5,6 @@ const { chunkText } = require('./chunker');
 const { embedTexts } = require('./embeddings');
 const { createCollection, upsertVectors } = require('./qdrant');
 
-// Function to read all markdown files from a directory
 const readBookContent = async (directoryPath) => {
   try {
     const files = await fs.readdir(directoryPath);
