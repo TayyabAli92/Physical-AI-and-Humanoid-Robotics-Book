@@ -3,7 +3,7 @@
 
     // Configuration
     const CONFIG = {
-        API_BASE_URL: window.RAG_CHATBOT_API_URL || 'http://localhost:3001',
+        API_BASE_URL: window.RAG_CHATBOT_API_URL || 'https://physical-ai-and-humanoid-robotics-b-rho.vercel.app/',
         CHATBOT_ID: 'rag-chatbot',
         IS_INITIALIZED: false
     };
