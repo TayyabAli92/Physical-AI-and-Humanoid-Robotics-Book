@@ -182,9 +182,9 @@
 
                 // Try multiple potential API endpoints in order of preference
                 const endpoints = [
-                    'https://tayyab92-fastapi-chatbot-backend.hf.space/ask-agent', // Production endpoint (relative)
-                    'https://tayyab92-fastapi-chatbot-backend.hf.space/ask-agent', // Local development
-                    `https://tayyab92-fastapi-chatbot-backend.hf.space/ask-agent` // Full origin
+                    'https://tayyab92-fastapi-chatbot-backend.hf.space/api/v1/ask-agent', // Production endpoint (relative)
+                    'https://tayyab92-fastapi-chatbot-backend.hf.space/api/v1/ask-agent', // Local development
+                    `https://tayyab92-fastapi-chatbot-backend.hf.space/api/v1/ask-agent` // Full origin
                 ];
 
                 let response, data;
