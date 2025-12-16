@@ -3,7 +3,7 @@
 
     // Configuration
     const CONFIG = {
-        API_BASE_URL: window.RAG_CHATBOT_API_URL || 'https://tayyab92-fastapi-chatbot-backend.hf.space',
+        API_BASE_URL: window.RAG_CHATBOT_API_URL || 'https://tayyab92-fastapi-chatbot-backend.hf.space/ask-agent',
         CHATBOT_ID: 'rag-chatbot',
         IS_INITIALIZED: false
     };

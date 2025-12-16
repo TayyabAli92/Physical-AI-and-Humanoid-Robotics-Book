@@ -7,7 +7,7 @@ class ChatWidget {
   constructor(agentId) {
     this.agentId = agentId;
     this.isOpen = false;
-    this.apiUrl = "https://tayyab92-fastapi-chatbot-backend.hf.space";
+    this.apiUrl = "https://tayyab92-fastapi-chatbot-backend.hf.space/ask-agent";
     this.initializeWidget();
   }
 
