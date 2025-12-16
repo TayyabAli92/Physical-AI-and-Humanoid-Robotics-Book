@@ -7,7 +7,7 @@ class ChatWidget {
   constructor(agentId) {
     this.agentId = agentId;
     this.isOpen = false;
-    this.apiUrl = "https://fast-api-backend-alpha.vercel.app/";
+    this.apiUrl = "https://tayyab92-fastapi-chatbot-backend.hf.space";
     this.initializeWidget();
   }
 
