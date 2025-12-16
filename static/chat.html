@@ -183,7 +183,7 @@
                 // Try multiple potential API endpoints in order of preference
                 const endpoints = [
                     '/api/v1/rag', // Production endpoint (relative)
-                    'http://localhost:3001/api/v1/rag', // Local development
+                    'https://physical-ai-and-humanoid-robotics-b-rho.vercel.app/api/v1/rag', // Local development
                     `${window.location.origin}/api/v1/rag` // Full origin
                 ];
 
@@ -241,7 +241,7 @@
                 if (window.selectedTextForAgent && window.selectedTextForAgent.length > 0) {
                     const fallbackEndpoints = [
                         '/api/v1/rag/selected',
-                        'http://localhost:3001/api/v1/rag/selected',
+                        'https://physical-ai-and-humanoid-robotics-b-rho.vercel.app/api/v1/rag/selected',
                         `${window.location.origin}/api/v1/rag/selected`
                     ];
 
