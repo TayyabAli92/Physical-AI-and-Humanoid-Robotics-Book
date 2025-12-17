@@ -240,9 +240,9 @@
                 // Try fallback endpoint for selected text if it's a connection error
                 if (window.selectedTextForAgent && window.selectedTextForAgent.length > 0) {
                     const fallbackEndpoints = [
-                        '/api/v1/ask-agent',
-                        'https://physical-ai-and-humanoid-robotics-b-rho.vercel.app/api/v1/ask-agent',
-                        `${window.location.origin}/api/v1/ask-agent`
+                        // '/api/v1/ask-agent',
+                        'https://tayyab92-fastapi-chatbot-backend.hf.space/api/v1/ask-agent',
+                        // `${window.location.origin}/api/v1/ask-agent`
                     ];
 
                     for (const endpoint of fallbackEndpoints) {
